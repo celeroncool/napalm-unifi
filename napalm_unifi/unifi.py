@@ -16,6 +16,8 @@ from napalm.base.netmiko_helpers import netmiko_args
 import ntc_templates
 from textfsm import clitable
 
+from napalm_unifi.usw_lite_8_poe import get_interfaces_usw_lite_8_poe
+
 template_dir = path.abspath(path.join(path.dirname(__file__), "utils", "textfsm_templates"))
 local_cli_table = clitable.CliTable("index", template_dir)
 
@@ -354,6 +356,14 @@ class UnifiSwitchBase(NoEnableMixin, UnifiConfigMixin, UnifiBaseDriver):
         return ports
 
     def get_interfaces(self) -> Dict[str, models.InterfaceDict]:
-        interfaces = super().get_interfaces()
-        interfaces.update(self.get_ports())
+        # Check if this is a USW-Lite-8-PoE model
+        facts = self.get_facts()
+        if facts.get("model") == "USW-Lite-8-PoE":
+            return get_interfaces_usw_lite_8_poe(self._netmiko_device)
+    
+        # Original implementation for other models
+        interfaces = {}
+        for port_name, port in self.get_ports().items():
+            interfaces[port_name] = port
+    
         return interfaces
