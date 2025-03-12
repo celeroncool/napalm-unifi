@@ -339,7 +339,7 @@ class UnifiSwitchBase(NoEnableMixin, UnifiConfigMixin, UnifiBaseDriver):
             enabled = True
             if details.get("status") == "disabled":
                 enabled = False
-            port = f"Port {port}"
+            port = f"Port{port}"
             ports[port] = {
                 "description": details["name"],
                 "is_enabled": enabled,
