@@ -141,7 +141,10 @@ class UnifiBaseDriver(NetworkDriver, ABC):
     def get_interfaces_ip(self) -> Dict[str, models.InterfacesIPDict]:
         interfaces: Dict[str, models.InterfacesIPDict] = {}
         output = self.send_command("ip address show")
+        
         for record in output:
+            if record.get("INTERFACE") == "sit0@NONE":
+                continue
             interface_name = record["interface"]
             interfaces.setdefault(interface_name, {
                 "ipv4": {},
