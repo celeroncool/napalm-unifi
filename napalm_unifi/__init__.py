@@ -1,5 +1,4 @@
 """napalm-unifi package."""
+from napalm_unifi.unifi import UnifiSwitchDriver
 
-from napalm_unifi.unifi import UnifiBaseDriver
-
-__all__ = ('UnifiBaseDriver',)
+__all__ = ['UnifiSwitchDriver']
